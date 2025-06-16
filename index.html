@@ -1,757 +1,822 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Propuesta Transformación Digital</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: linear-gradient(135deg, #1e1e2d 0%, #252538 100%);
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
 
-        /* Particles background */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
+      /* Particles background */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
 
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(245, 166, 35, 0.3);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(245, 166, 35, 0.3);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+          opacity: 0.3;
         }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+          opacity: 0.8;
+        }
+      }
 
+      .container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+      }
+
+      .slider {
+        width: 100%;
+        max-width: 1200px;
+        background: rgba(18, 18, 46, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(245, 166, 35, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #f5a623, #ff6b35);
+        border-radius: 0 0 4px 4px;
+        transition: width 0.6s ease;
+        z-index: 10;
+      }
+
+      .slides-container {
+        overflow: hidden;
+        position: relative;
+      }
+
+      .slides {
+        display: flex;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .slide {
+        flex: 0 0 100%;
+        padding: 3rem;
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .slide-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .slide-number {
+        display: inline-block;
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        color: #000;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .description {
+        font-size: 1.2rem;
+        color: #b8b8d1;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .card {
+        background: linear-gradient(
+          135deg,
+          rgba(31, 31, 62, 0.8),
+          rgba(45, 45, 80, 0.6)
+        );
+        border: 1px solid rgba(245, 166, 35, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #f5a623, #ff6b35);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(245, 166, 35, 0.3);
+        box-shadow: 0 15px 30px rgba(245, 166, 35, 0.1);
+      }
+
+      .card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .icon {
+        width: 48px;
+        height: 48px;
+        padding: 12px;
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .icon svg {
+        width: 24px;
+        height: 24px;
+        fill: #000;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.3;
+      }
+
+      .card-text {
+        color: #b8b8d1;
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      .controls {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        color: #000;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 166, 35, 0.4);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .dots {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        transform: scale(1.2);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
         .container {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .slider {
-            width: 100%;
-            max-width: 1200px;
-            background: rgba(18, 18, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid rgba(245, 166, 35, 0.1);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #f5a623, #ff6b35);
-            border-radius: 0 0 4px 4px;
-            transition: width 0.6s ease;
-            z-index: 10;
-        }
-
-        .slides-container {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .slides {
-            display: flex;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 1rem;
         }
 
         .slide {
-            flex: 0 0 100%;
-            padding: 3rem;
-            min-height: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .slide-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .slide-number {
-            display: inline-block;
-            background: linear-gradient(135deg, #f5a623, #ff6b35);
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            background: linear-gradient(135deg, #f5a623, #ff6b35);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            text-align: center;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .description {
-            font-size: 1.2rem;
-            color: #b8b8d1;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
+          padding: 2rem 1.5rem;
+          min-height: auto;
         }
 
         .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: linear-gradient(135deg, rgba(31, 31, 62, 0.8), rgba(45, 45, 80, 0.6));
-            border: 1px solid rgba(245, 166, 35, 0.1);
-            border-radius: 16px;
-            padding: 1.5rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #f5a623, #ff6b35);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(245, 166, 35, 0.3);
-            box-shadow: 0 15px 30px rgba(245, 166, 35, 0.1);
-        }
-
-        .card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .icon {
-            width: 48px;
-            height: 48px;
-            padding: 12px;
-            background: linear-gradient(135deg, #f5a623, #ff6b35);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .icon svg {
-            width: 24px;
-            height: 24px;
-            fill: #000;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.3;
-        }
-
-        .card-text {
-            color: #b8b8d1;
-            line-height: 1.6;
-            font-size: 1rem;
+          grid-template-columns: 1fr;
+          gap: 1rem;
         }
 
         .controls {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+          bottom: 1rem;
+          flex-wrap: wrap;
+          gap: 0.5rem;
         }
 
         .btn {
-            background: linear-gradient(135deg, #f5a623, #ff6b35);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            color: #000;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
+          padding: 10px 20px;
+          font-size: 0.9rem;
         }
+      }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 166, 35, 0.4);
+      /* Animations */
+      .slide-enter {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+
+      .slide-enter-active {
+        opacity: 1;
+        transform: translateX(0);
+        transition: all 0.6s ease;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .dots {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dot.active {
-            background: linear-gradient(135deg, #f5a623, #ff6b35);
-            transform: scale(1.2);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .slide {
-                padding: 2rem 1.5rem;
-                min-height: auto;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .controls {
-                bottom: 1rem;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Animations */
-        .slide-enter {
-            opacity: 0;
-            transform: translateX(50px);
-        }
-
-        .slide-enter-active {
-            opacity: 1;
-            transform: translateX(0);
-            transition: all 0.6s ease;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card-animate {
-            animation: slideInUp 0.6s ease forwards;
-        }
+      .card-animate {
+        animation: slideInUp 0.6s ease forwards;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Particles Background -->
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <div class="slider">
-            <div class="progress-bar" id="progressBar"></div>
-            
-            <div class="slides-container">
-                <div class="slides" id="slides">
-                    <!-- Fase 1 -->
-                    <section class="slide">
-                        <div class="slide-header">
-                            <span class="slide-number">Fase 1</span>
-                            <h2>Diagnóstico Organizacional</h2>
-                            <p class="description">
-                                Entendemos tu operación actual para detectar oportunidades de mejora y potenciar tus fortalezas existentes.
-                            </p>
-                        </div>
-                        
-                        <div class="cards-grid">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Entrevistas con Equipo</h3>
-                                </div>
-                                <p class="card-text">
-                                    Conversaciones profundas para conocer el día a día, desafíos y percepciones del equipo sobre los procesos actuales.
-                                </p>
-                            </div>
+      <div class="slider">
+        <div class="progress-bar" id="progressBar"></div>
 
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19v2h-1.5v1h-1v-1H5v-1H3.5V2H5V.5C5 .22 5.22 0 5.5 0h13c.28 0 .5.22.5.5V2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Análisis FODA</h3>
-                                </div>
-                                <p class="card-text">
-                                    Evaluación estratégica completa de fortalezas, oportunidades, debilidades y amenazas del negocio.
-                                </p>
-                            </div>
+        <div class="slides-container">
+          <div class="slides" id="slides">
+            <!-- Fase 1 -->
+            <section class="slide">
+              <div class="slide-header">
+                <span class="slide-number">Fase 1</span>
+                <h2>Diagnóstico Organizacional</h2>
+                <h3>Restaurant El Alamo</h3>
+                <p class="description">
+                  Entendemos tu operación actual para detectar oportunidades de
+                  mejora y potenciar tus fortalezas existentes.
+                </p>
+              </div>
 
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Mapeo de Procesos</h3>
-                                </div>
-                                <p class="card-text">
-                                    Diagramas detallados para visualizar flujos operativos actuales y la experiencia completa del cliente.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10 2 8.95 2 7.88 2 7 2.88 7 3.95c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Evaluación Tecnológica</h3>
-                                </div>
-                                <p class="card-text">
-                                    Revisión integral del equipo y software disponibles para identificar oportunidades de digitalización.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm0-4H7v-2h5v2zm5 4h-3v-2h3v2zm0-4h-3v-2h3v2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Business Model Canvas</h3>
-                                </div>
-                                <p class="card-text">
-                                    Marco visual estratégico para entender, analizar y optimizar el modelo de negocio actual.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Fase 2 -->
-                    <section class="slide">
-                        <div class="slide-header">
-                            <span class="slide-number">Fase 2</span>
-                            <h2>Propuesta Tecnológica</h2>
-                            <p class="description">
-                                Digitalizamos tu negocio con soluciones personalizadas, escalables y fáciles de usar para todo tu equipo.
-                            </p>
-                        </div>
-                        
-                        <div class="cards-grid">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Desarrollo Sitio Web</h3>
-                                </div>
-                                <p class="card-text">
-                                    Página web profesional optimizada con menú digital, sistema de contacto y reservas en línea integradas.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H7V4h10v16z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Sistema de Comanda Digital</h3>
-                                </div>
-                                <p class="card-text">
-                                    Herramienta intuitiva para gestionar pedidos, inventario y agilizar toda la operación del restaurante.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Automatización Inteligente</h3>
-                                </div>
-                                <p class="card-text">
-                                    Integración de procesos digitales para mejorar eficiencia operativa y reducir errores manuales.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Capacitación Integral</h3>
-                                </div>
-                                <p class="card-text">
-                                    Formación completa y soporte continuo para el uso efectivo de todas las herramientas digitales.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Integración Apps Delivery</h3>
-                                </div>
-                                <p class="card-text">
-                                    Conexión seamless con plataformas de reparto para ampliar tu alcance y maximizar ventas.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Fase 3 -->
-                    <section class="slide">
-                        <div class="slide-header">
-                            <span class="slide-number">Fase 3</span>
-                            <h2>Marketing Digital & Campañas</h2>
-                            <p class="description">
-                                Atraemos y fidelizamos clientes con estrategias de marketing digital y publicidad pagada altamente segmentada.
-                            </p>
-                        </div>
-                        
-                        <div class="cards-grid">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Inbound Marketing</h3>
-                                </div>
-                                <p class="card-text">
-                                    Estrategias de contenido valioso en blog, email marketing y redes sociales para atraer clientes naturalmente.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM8.5 16L12 13.5 15.5 16 12 18.5 8.5 16z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Lead Magnets & Promociones</h3>
-                                </div>
-                                <p class="card-text">
-                                    Ofertas inteligentes y contenido premium para captar leads calificados y convertirlos en clientes leales.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Campañas Pagadas</h3>
-                                </div>
-                                <p class="card-text">
-                                    Publicidad estratégica en Google Ads y Meta Ads con segmentación precisa y optimización continua del ROI.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Analytics & Optimización</h3>
-                                </div>
-                                <p class="card-text">
-                                    Monitoreo avanzado con métricas clave y optimización constante para maximizar resultados y ROI.
-                                </p>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="icon">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 class="card-title">Calendario Editorial</h3>
-                                </div>
-                                <p class="card-text">
-                                    Planificación estratégica de contenidos y pauta publicitaria para mantener presencia constante y efectiva.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
+              <div class="cards-grid">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Entrevistas con Equipo</h3>
+                  </div>
+                  <p class="card-text">
+                    Conversaciones profundas para conocer el día a día, desafíos
+                    y percepciones del equipo sobre los procesos actuales.
+                  </p>
                 </div>
-            </div>
 
-            <div class="controls">
-                <button class="btn" id="prevBtn">← Anterior</button>
-                <div class="dots" id="dots"></div>
-                <button class="btn" id="nextBtn">Siguiente →</button>
-            </div>
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19v2h-1.5v1h-1v-1H5v-1H3.5V2H5V.5C5 .22 5.22 0 5.5 0h13c.28 0 .5.22.5.5V2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Análisis FODA</h3>
+                  </div>
+                  <p class="card-text">
+                    Evaluación estratégica completa de fortalezas,
+                    oportunidades, debilidades y amenazas del negocio.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Mapeo de Procesos</h3>
+                  </div>
+                  <p class="card-text">
+                    Diagramas detallados para visualizar flujos operativos
+                    actuales y la experiencia completa del cliente.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10 2 8.95 2 7.88 2 7 2.88 7 3.95c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Evaluación Tecnológica</h3>
+                  </div>
+                  <p class="card-text">
+                    Revisión integral del equipo y software disponibles para
+                    identificar oportunidades de digitalización.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm0-4H7v-2h5v2zm5 4h-3v-2h3v2zm0-4h-3v-2h3v2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Business Model Canvas</h3>
+                  </div>
+                  <p class="card-text">
+                    Marco visual estratégico para entender, analizar y optimizar
+                    el modelo de negocio actual.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Fase 2 -->
+            <section class="slide">
+              <div class="slide-header">
+                <span class="slide-number">Fase 2</span>
+                <h2>Propuesta Tecnológica</h2>
+                <h3>Restaurant El Alamo</h3>
+                <p class="description">
+                  Digitalizamos tu negocio con soluciones personalizadas,
+                  escalables y fáciles de usar para todo tu equipo.
+                </p>
+              </div>
+
+              <div class="cards-grid">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Desarrollo Sitio Web</h3>
+                  </div>
+                  <p class="card-text">
+                    Página web profesional optimizada con menú digital, sistema
+                    de contacto y reservas en línea integradas.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H7V4h10v16z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Sistema de Comanda Digital</h3>
+                  </div>
+                  <p class="card-text">
+                    Herramienta intuitiva para gestionar pedidos, inventario y
+                    agilizar toda la operación del restaurante.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Automatización Inteligente</h3>
+                  </div>
+                  <p class="card-text">
+                    Integración de procesos digitales para mejorar eficiencia
+                    operativa y reducir errores manuales.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Capacitación Integral</h3>
+                  </div>
+                  <p class="card-text">
+                    Formación completa y soporte continuo para el uso efectivo
+                    de todas las herramientas digitales.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Integración Apps Delivery</h3>
+                  </div>
+                  <p class="card-text">
+                    Conexión seamless con plataformas de reparto para ampliar tu
+                    alcance y maximizar ventas.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Fase 3 -->
+            <section class="slide">
+              <div class="slide-header">
+                <span class="slide-number">Fase 3</span>
+                <h2>Marketing Digital & Campañas</h2>
+                <h3>Restaurant El Alamo</h3>
+                <p class="description">
+                  Atraemos y fidelizamos clientes con estrategias de marketing
+                  digital y publicidad pagada altamente segmentada.
+                </p>
+              </div>
+
+              <div class="cards-grid">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Inbound Marketing</h3>
+                  </div>
+                  <p class="card-text">
+                    Estrategias de contenido valioso en blog, email marketing y
+                    redes sociales para atraer clientes naturalmente.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM8.5 16L12 13.5 15.5 16 12 18.5 8.5 16z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Lead Magnets & Promociones</h3>
+                  </div>
+                  <p class="card-text">
+                    Ofertas inteligentes y contenido premium para captar leads
+                    calificados y convertirlos en clientes leales.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Campañas Pagadas</h3>
+                  </div>
+                  <p class="card-text">
+                    Publicidad estratégica en Google Ads y Meta Ads con
+                    segmentación precisa y optimización continua del ROI.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Analytics & Optimización</h3>
+                  </div>
+                  <p class="card-text">
+                    Monitoreo avanzado con métricas clave y optimización
+                    constante para maximizar resultados y ROI.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-header">
+                    <div class="icon">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="card-title">Calendario Editorial</h3>
+                  </div>
+                  <p class="card-text">
+                    Planificación estratégica de contenidos y pauta publicitaria
+                    para mantener presencia constante y efectiva.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
+
+        <div class="controls">
+          <button class="btn" id="prevBtn">← Anterior</button>
+          <div class="dots" id="dots"></div>
+          <button class="btn" id="nextBtn">Siguiente →</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        class DigitalTransformationSlider {
-            constructor() {
-                this.currentSlide = 0;
-                this.totalSlides = document.querySelectorAll('.slide').length;
-                this.slides = document.getElementById('slides');
-                this.prevBtn = document.getElementById('prevBtn');
-                this.nextBtn = document.getElementById('nextBtn');
-                this.progressBar = document.getElementById('progressBar');
-                this.dotsContainer = document.getElementById('dots');
-                
-                this.init();
-            }
+      class DigitalTransformationSlider {
+        constructor() {
+          this.currentSlide = 0;
+          this.totalSlides = document.querySelectorAll(".slide").length;
+          this.slides = document.getElementById("slides");
+          this.prevBtn = document.getElementById("prevBtn");
+          this.nextBtn = document.getElementById("nextBtn");
+          this.progressBar = document.getElementById("progressBar");
+          this.dotsContainer = document.getElementById("dots");
 
-            init() {
-                this.createParticles();
-                this.createDots();
-                this.updateSlider();
-                this.bindEvents();
-                // Removido autoPlay para control manual
-            }
-
-            createParticles() {
-                const particlesContainer = document.getElementById('particles');
-                const particleCount = 50;
-
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.left = Math.random() * 100 + '%';
-                    particle.style.top = Math.random() * 100 + '%';
-                    particle.style.animationDelay = Math.random() * 6 + 's';
-                    particlesContainer.appendChild(particle);
-                }
-            }
-
-            createDots() {
-                for (let i = 0; i < this.totalSlides; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'dot';
-                    dot.addEventListener('click', () => this.goToSlide(i));
-                    this.dotsContainer.appendChild(dot);
-                }
-            }
-
-            updateSlider() {
-                // Actualizar posición del slider
-                this.slides.style.transform = `translateX(-${this.currentSlide * 100}%)`;
-                
-                // Actualizar barra de progreso
-                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
-                this.progressBar.style.width = progress + '%';
-                
-                // Actualizar dots
-                document.querySelectorAll('.dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === this.currentSlide);
-                });
-                
-                // Actualizar botones
-                this.prevBtn.disabled = this.currentSlide === 0;
-                this.nextBtn.disabled = this.currentSlide === this.totalSlides - 1;
-                
-                // Animar cards
-                this.animateCards();
-            }
-
-            animateCards() {
-                const currentSlide = document.querySelectorAll('.slide')[this.currentSlide];
-                const cards = currentSlide.querySelectorAll('.card');
-                
-                cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(30px)';
-                    
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.6s ease';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100 + 200);
-                });
-            }
-
-            goToSlide(index) {
-                if (index >= 0 && index < this.totalSlides) {
-                    this.currentSlide = index;
-                    this.updateSlider();
-                }
-            }
-
-            nextSlide() {
-                if (this.currentSlide < this.totalSlides - 1) {
-                    this.currentSlide++;
-                    this.updateSlider();
-                }
-            }
-
-            prevSlide() {
-                if (this.currentSlide > 0) {
-                    this.currentSlide--;
-                    this.updateSlider();
-                }
-            }
-
-            bindEvents() {
-                this.nextBtn.addEventListener('click', () => this.nextSlide());
-                this.prevBtn.addEventListener('click', () => this.prevSlide());
-                
-                // Navegación con teclado
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowRight') this.nextSlide();
-                    if (e.key === 'ArrowLeft') this.prevSlide();
-                });
-
-                // Touch/swipe support
-                let startX = 0;
-                let endX = 0;
-
-                this.slides.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                });
-
-                this.slides.addEventListener('touchend', (e) => {
-                    endX = e.changedTouches[0].clientX;
-                    const diff = startX - endX;
-                    
-                    if (Math.abs(diff) > 50) {
-                        if (diff > 0) {
-                            this.nextSlide();
-                        } else {
-                            this.prevSlide();
-                        }
-                    }
-                });
-            }
-
-            // Removido auto-play para control manual durante presentación
+          this.init();
         }
 
-        // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
-            new DigitalTransformationSlider();
-        });
+        init() {
+          this.createParticles();
+          this.createDots();
+          this.updateSlider();
+          this.bindEvents();
+          // Removido autoPlay para control manual
+        }
 
-        // Smooth scroll para enlaces internos
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+        createParticles() {
+          const particlesContainer = document.getElementById("particles");
+          const particleCount = 50;
+
+          for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement("div");
+            particle.className = "particle";
+            particle.style.left = Math.random() * 100 + "%";
+            particle.style.top = Math.random() * 100 + "%";
+            particle.style.animationDelay = Math.random() * 6 + "s";
+            particlesContainer.appendChild(particle);
+          }
+        }
+
+        createDots() {
+          for (let i = 0; i < this.totalSlides; i++) {
+            const dot = document.createElement("div");
+            dot.className = "dot";
+            dot.addEventListener("click", () => this.goToSlide(i));
+            this.dotsContainer.appendChild(dot);
+          }
+        }
+
+        updateSlider() {
+          // Actualizar posición del slider
+          this.slides.style.transform = `translateX(-${
+            this.currentSlide * 100
+          }%)`;
+
+          // Actualizar barra de progreso
+          const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+          this.progressBar.style.width = progress + "%";
+
+          // Actualizar dots
+          document.querySelectorAll(".dot").forEach((dot, index) => {
+            dot.classList.toggle("active", index === this.currentSlide);
+          });
+
+          // Actualizar botones
+          this.prevBtn.disabled = this.currentSlide === 0;
+          this.nextBtn.disabled = this.currentSlide === this.totalSlides - 1;
+
+          // Animar cards
+          this.animateCards();
+        }
+
+        animateCards() {
+          const currentSlide =
+            document.querySelectorAll(".slide")[this.currentSlide];
+          const cards = currentSlide.querySelectorAll(".card");
+
+          cards.forEach((card, index) => {
+            card.style.opacity = "0";
+            card.style.transform = "translateY(30px)";
+
+            setTimeout(() => {
+              card.style.transition = "all 0.6s ease";
+              card.style.opacity = "1";
+              card.style.transform = "translateY(0)";
+            }, index * 100 + 200);
+          });
+        }
+
+        goToSlide(index) {
+          if (index >= 0 && index < this.totalSlides) {
+            this.currentSlide = index;
+            this.updateSlider();
+          }
+        }
+
+        nextSlide() {
+          if (this.currentSlide < this.totalSlides - 1) {
+            this.currentSlide++;
+            this.updateSlider();
+          }
+        }
+
+        prevSlide() {
+          if (this.currentSlide > 0) {
+            this.currentSlide--;
+            this.updateSlider();
+          }
+        }
+
+        bindEvents() {
+          this.nextBtn.addEventListener("click", () => this.nextSlide());
+          this.prevBtn.addEventListener("click", () => this.prevSlide());
+
+          // Navegación con teclado
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight") this.nextSlide();
+            if (e.key === "ArrowLeft") this.prevSlide();
+          });
+
+          // Touch/swipe support
+          let startX = 0;
+          let endX = 0;
+
+          this.slides.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+          });
+
+          this.slides.addEventListener("touchend", (e) => {
+            endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+
+            if (Math.abs(diff) > 50) {
+              if (diff > 0) {
+                this.nextSlide();
+              } else {
+                this.prevSlide();
+              }
+            }
+          });
+        }
+
+        // Removido auto-play para control manual durante presentación
+      }
+
+      // Inicializar cuando el DOM esté listo
+      document.addEventListener("DOMContentLoaded", () => {
+        new DigitalTransformationSlider();
+      });
+
+      // Smooth scroll para enlaces internos
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
             });
+          }
         });
+      });
     </script>
-</body>
+  </body>
 </html>
