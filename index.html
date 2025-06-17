@@ -14,7 +14,7 @@
       body {
         font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
           sans-serif;
-        background: linear-gradient(135deg, #1e1e2d 0%, #252538 100%);
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
         color: #ffffff;
         min-height: 100vh;
         overflow-x: hidden;
@@ -107,7 +107,7 @@
 
       .slide-header {
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
       }
 
       .slide-number {
@@ -136,7 +136,7 @@
       }
       h3 {
         font-size: clamp(2rem, 4vw, 3rem);
-        background: linear-gradient(135deg, #31881b, #57da2f);
+        background: linear-gradient(135deg, #529c20, #0c9b0c);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -347,6 +347,79 @@
       .card-animate {
         animation: slideInUp 0.6s ease forwards;
       }
+
+      /* Modal Styles */
+      .modal {
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+        display: flex; /* Used to center modal content */
+        align-items: center; /* Used to center modal content */
+        justify-content: center; /* Used to center modal content */
+      }
+
+      .modal-content {
+        background-color: #12122e; /* Dark background similar to cards */
+        margin: auto;
+        padding: 30px;
+        border: 1px solid rgba(245, 166, 35, 0.2); /* Accent border */
+        border-radius: 16px;
+        width: 80%;
+        max-width: 600px; /* Max width for the modal */
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        animation: fadeInModal 0.5s ease;
+      }
+
+      @keyframes fadeInModal {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 15px;
+        right: 25px;
+      }
+
+      .modal-close-btn:hover,
+      .modal-close-btn:focus {
+        color: #f5a623; /* Accent color on hover */
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #f5a623, #ff6b35);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .modal-text {
+        color: #b8b8d1;
+        line-height: 1.6;
+        font-size: 1.1rem;
+      }
     </style>
   </head>
   <body>
@@ -364,7 +437,7 @@
               <div class="slide-header">
                 <span class="slide-number">Fase 1</span>
                 <h2>Diagnóstico Organizacional</h2>
-                <h3>Restaurant El Alamo</h3>
+                <h3>Restaurante El Alamo</h3>
                 <p class="description">
                   Entendemos tu operación actual para detectar oportunidades de
                   mejora y potenciar tus fortalezas existentes.
@@ -464,7 +537,7 @@
               <div class="slide-header">
                 <span class="slide-number">Fase 2</span>
                 <h2>Propuesta Tecnológica</h2>
-                <h3>Restaurant El Alamo</h3>
+                <h3>Restaurante El Alamo</h3>
                 <p class="description">
                   Digitalizamos tu negocio con soluciones personalizadas,
                   escalables y fáciles de usar para todo tu equipo.
@@ -564,7 +637,7 @@
               <div class="slide-header">
                 <span class="slide-number">Fase 3</span>
                 <h2>Marketing Digital & Campañas</h2>
-                <h3>Restaurant El Alamo</h3>
+                <h3>Restaurante El Alamo</h3>
                 <p class="description">
                   Atraemos y fidelizamos clientes con estrategias de marketing
                   digital y publicidad pagada altamente segmentada.
@@ -666,6 +739,14 @@
           <div class="dots" id="dots"></div>
           <button class="btn" id="nextBtn">Siguiente →</button>
         </div>
+      </div>
+    </div>
+
+    <div id="cardModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="modal-close-btn">&times;</span>
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <p id="modalText" class="modal-text"></p>
       </div>
     </div>
 
@@ -813,6 +894,62 @@
       // Inicializar cuando el DOM esté listo
       document.addEventListener("DOMContentLoaded", () => {
         new DigitalTransformationSlider();
+
+        // Modal elements
+        const modal = document.getElementById("cardModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalText = document.getElementById("modalText");
+        const closeModalBtn = document.querySelector(".modal-close-btn");
+
+        // Function to open the modal with card content
+        function openModal(title, text) {
+          modalTitle.textContent = title;
+          modalText.innerHTML = text; // Use innerHTML to allow for simple HTML in card text if needed
+          modal.style.display = "flex"; // Use flex to keep centering
+        }
+
+        // Function to close the modal
+        function closeModal() {
+          modal.style.display = "none";
+        }
+
+        // Event listener for the close button
+        if (closeModalBtn) {
+          closeModalBtn.addEventListener("click", closeModal);
+        }
+
+        // Event listener for clicking outside the modal content to close
+        window.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            closeModal();
+          }
+        });
+
+        // Add click listeners to all cards
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card) => {
+          card.addEventListener("click", (event) => {
+            // Added event parameter
+            // Check if the click target is not a button or link within the card
+            if (
+              event.target.tagName === "BUTTON" ||
+              event.target.tagName === "A"
+            ) {
+              return;
+            }
+            const title = card.querySelector(".card-title").textContent;
+            const text = card.querySelector(".card-text").innerHTML; // Keep innerHTML for potential formatting
+            openModal(title, text);
+            // Add a class to the card to make it identifiable as clickable
+            card.classList.add("clickable-card");
+          });
+        });
+
+        // Add some basic styling for clickable cards (optional, can be in CSS too)
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = ".clickable-card { cursor: pointer; }";
+        document.head.appendChild(styleSheet);
       });
 
       // Smooth scroll para enlaces internos
