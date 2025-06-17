@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="" href="./img/favicon.ico" />
     <title>Propuesta Transformación Digital</title>
     <style>
       * {
@@ -65,7 +66,7 @@
       .slider {
         width: 100%;
         max-width: 1200px;
-        background: #272625;
+        background: rgba(42, 42, 46, 0.95);
         backdrop-filter: blur(20px);
         border-radius: 24px;
         border: 1px solid rgba(245, 166, 35, 0.1);
@@ -73,7 +74,6 @@
           0 0 0 1px rgba(255, 255, 255, 0.05);
         overflow: hidden;
         position: relative;
-        /* border: dashed 2px orange; */
       }
 
       .progress-bar {
@@ -109,7 +109,6 @@
       .slide-header {
         text-align: center;
         margin-bottom: 2rem;
-        /* border: dashed 2px orange; */
       }
 
       .slide-number {
@@ -161,12 +160,15 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 1.5rem;
-
-        /* border: dashed 2px orange; */
+        margin-top: 2rem;
       }
 
       .card {
-        background: linear-gradient(135deg, rgb(29, 34, 46), rgb(37, 37, 53));
+        background: linear-gradient(
+          135deg,
+          rgba(31, 31, 62, 0.8),
+          rgba(45, 45, 80, 0.6)
+        );
         border: 1px solid rgba(245, 166, 35, 0.1);
         border-radius: 16px;
         padding: 1.5rem;
@@ -419,6 +421,293 @@
         line-height: 1.6;
         font-size: 1.1rem;
       }
+
+      /* === Start of New Card Styles === */
+      /* General Styles - Applied if not already present or if more specific */
+      /* font-family: consolas; */ /* Consider if this should override existing font */
+
+      /* New Container for cards */
+      .glass-container /* Renamed to avoid conflict if 'container' is generic */ {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 40px 0;
+        /* Existing .cards-grid might handle this, or this replaces it */
+      }
+
+      .glass-container .box /* Renamed to be specific */ {
+        position: relative;
+        width: 320px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 40px 30px;
+        transition: 0.5s;
+      }
+
+      .glass-container .box::before {
+        content: " ";
+        position: absolute;
+        top: 0;
+        left: 50px;
+        width: 50%;
+        height: 100%;
+        text-decoration: none;
+        background: #fff; /* Default, will be overridden by nth-child */
+        border-radius: 8px;
+        transform: skewX(15deg);
+        transition: 0.5s;
+      }
+
+      .glass-container .box::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50px; /* Corrected from '50' to '50px' for consistency */
+        width: 50%;
+        height: 100%;
+        background: #fff; /* Default, will be overridden by nth-child */
+        border-radius: 8px;
+        transform: skewX(15deg);
+        transition: 0.5s;
+        filter: blur(30px);
+      }
+
+      .glass-container .box:hover::before,
+      .glass-container .box:hover::after {
+        transform: skewX(0deg);
+        left: 20px;
+        width: calc(100% - 90px);
+      }
+
+      /* Specific gradient backgrounds for cards */
+      /* These will need to be applied thoughtfully, perhaps by adding specific classes 
+           to boxes later, or by adjusting JS to add them, if the :nth-child logic 
+           isn't robust across multiple slide containers. For now, include them. */
+      .glass-container .box:nth-child(1)::before,
+      .glass-container .box:nth-child(1):after {
+        background: linear-gradient(315deg, #ffbc00, #ff0058);
+      }
+
+      .glass-container .box:nth-child(2):before,
+      .glass-container .box:nth-child(2):after {
+        background: linear-gradient(315deg, #03a9f4, #ff0058);
+      }
+
+      .glass-container .box:nth-child(3):before,
+      .glass-container .box:nth-child(3):after {
+        background: linear-gradient(315deg, #4dff03, #00d0ff);
+      }
+      /* Add more :nth-child rules if more than 3 cards per group are common 
+           and need distinct default colors. Or, a programmatic approach via JS might be better. */
+
+      .glass-container .box span /* This span seems to be for animated shiny elements */ {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5; /* Ensure this z-index works with other elements */
+        pointer-events: none;
+      }
+
+      .glass-container .box span::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0; /* Initial state for animation */
+        height: 0; /* Initial state for animation */
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: 0.1s; /* Fast transition for hover effect */
+        animation: animateGlass 2s ease-in-out infinite; /* Renamed animation */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .glass-container .box:hover span::before {
+        top: -50px;
+        left: 50px;
+        width: 100px;
+        height: 100px;
+        opacity: 1;
+      }
+
+      .glass-container .box span::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%; /* Start full size for some reason? Then shrinks on hover? Check logic. */
+        height: 100%; /* Start full size for some reason? Then shrinks on hover? Check logic. */
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: 0.5s; /* Slower transition for this one */
+        animation: animateGlass 2s ease-in-out infinite; /* Renamed animation */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        animation-delay: -1s; /* Offset animation */
+      }
+
+      .glass-container .box:hover span::after {
+        bottom: -50px;
+        right: 50px;
+        width: 100px;
+        height: 100px;
+        opacity: 1;
+      }
+
+      @keyframes animateGlass /* Renamed animation */ {
+        0%,
+        100% {
+          transform: translateY(10px);
+        }
+
+        50% {
+          transform: translateY(-10px); /* Corrected: was 'translate(-10px)' */
+        }
+      }
+
+      .glass-container .box .content {
+        position: relative;
+        left: 0;
+        padding: 20px 40px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1; /* Lower than the span's z-index if span is on top */
+        transition: 0.5s; /* Matched 'transform' to 'transition' for clarity */
+        color: #fff;
+      }
+
+      .glass-container .box:hover .content {
+        left: -25px;
+        padding: 60px 40px;
+      }
+
+      .glass-container .box .content h2 {
+        font-size: 2em; /* Consider if this overrides existing h2 too much */
+        color: #fff;
+        margin-bottom: 10px;
+        /* The original card titles had a gradient. This will be plain white. */
+        /* To restore gradient, would need:
+             background: linear-gradient(135deg, #f5a623, #ff6b35);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+          */
+      }
+
+      .glass-container .box .content p {
+        font-size: 1.1em; /* Consider if this overrides existing p too much */
+        margin-bottom: 10px;
+        line-height: 1.4em;
+        color: #b8b8d1; /* Copied from original card text for consistency */
+      }
+
+      .glass-container .box .content a /* This is the 'Read More' link */ {
+        display: inline-block;
+        font-size: 1.1em;
+        color: #111;
+        background: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 700;
+        margin-top: 5px;
+      }
+
+      .glass-container .box .content a:hover {
+        background: #ffcf4d; /* Similar to original accent */
+        /* border: 1px solid rgba(255, 0, 88, 0.4); */ /* Original had no border */
+        /* box-shadow: 0 1px 15px rgba(1, 1, 1, 0.2); */ /* Original had no shadow */
+      }
+      /* === End of New Card Styles === */
+
+      /* === Responsive Adjustments for New Card Design === */
+
+      @media (max-width: 768px) {
+        /* Tablet-ish sizes */
+        .glass-container {
+          padding: 20px 0; /* Reduce padding for the container */
+        }
+
+        .glass-container .box {
+          width: 90%; /* Allow boxes to take more width */
+          max-width: 300px; /* Slightly reduce max-width if needed, or keep as is */
+          height: auto; /* Allow height to adjust to content */
+          margin: 20px 15px; /* Reduce margins */
+        }
+
+        .glass-container .box:hover .content {
+          left: 0; /* Reset hover effect that shifts content */
+          padding: 40px 30px; /* Adjust padding on hover for smaller screens */
+        }
+
+        .glass-container .box .content h2 {
+          font-size: 1.8em; /* Slightly reduce title font size */
+        }
+
+        .glass-container .box .content p {
+          font-size: 1em; /* Adjust paragraph font size */
+        }
+
+        /* Adjust animation elements on hover for smaller screens if they look too large */
+        .glass-container .box:hover span::before,
+        .glass-container .box:hover span::after {
+          width: 80px;
+          height: 80px;
+          top: -40px; /* Adjust position */
+          left: auto; /* Could be centered or adjusted */
+          right: -40px; /* Example adjustment */
+        }
+        .glass-container .box:hover span::before {
+          left: -40px;
+          right: auto;
+        }
+      }
+
+      @media (max-width: 480px) {
+        /* Mobile phone sizes */
+        .glass-container .box {
+          width: 95%; /* Take almost full width */
+          max-width: none; /* Remove max-width constraint if it's too restrictive */
+          margin: 15px 10px; /* Further reduce margins */
+        }
+
+        .glass-container .box:hover .content {
+          padding: 30px 20px; /* Further adjust padding */
+        }
+
+        .glass-container .box .content h2 {
+          font-size: 1.6em; /* Further reduce title font size */
+        }
+
+        .glass-container .box .content p {
+          font-size: 0.95em; /* Further adjust paragraph font size */
+        }
+
+        .glass-container .box:hover span::before,
+        .glass-container .box:hover span::after {
+          width: 60px;
+          height: 60px;
+          top: -30px;
+          /* Adjust position further if needed */
+        }
+        .glass-container .box:hover span::before {
+          left: -30px;
+        }
+        .glass-container .box:hover span::after {
+          right: -30px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -443,90 +732,61 @@
                 </p>
               </div>
 
-              <div class="cards-grid">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Entrevistas con Equipo</h3>
+              <div class="glass-container">
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Entrevistas con Equipo</h2>
+                    <p>
+                      Conversaciones profundas para conocer el día a día,
+                      desafíos y percepciones del equipo sobre los procesos
+                      actuales.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Conversaciones profundas para conocer el día a día, desafíos
-                    y percepciones del equipo sobre los procesos actuales.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19v2h-1.5v1h-1v-1H5v-1H3.5V2H5V.5C5 .22 5.22 0 5.5 0h13c.28 0 .5.22.5.5V2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Análisis FODA</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Análisis FODA</h2>
+                    <p>
+                      Evaluación estratégica completa de fortalezas,
+                      oportunidades, debilidades y amenazas del negocio.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Evaluación estratégica completa de fortalezas,
-                    oportunidades, debilidades y amenazas del negocio.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Mapeo de Procesos</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Mapeo de Procesos</h2>
+                    <p>
+                      Diagramas detallados para visualizar flujos operativos
+                      actuales y la experiencia completa del cliente.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Diagramas detallados para visualizar flujos operativos
-                    actuales y la experiencia completa del cliente.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10 2 8.95 2 7.88 2 7 2.88 7 3.95c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Evaluación Tecnológica</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Evaluación Tecnológica</h2>
+                    <p>
+                      Revisión integral del equipo y software disponibles para
+                      identificar oportunidades de digitalización.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Revisión integral del equipo y software disponibles para
-                    identificar oportunidades de digitalización.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm0-4H7v-2h5v2zm5 4h-3v-2h3v2zm0-4h-3v-2h3v2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Business Model Canvas</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Business Model Canvas</h2>
+                    <p>
+                      Marco visual estratégico para entender, analizar y
+                      optimizar el modelo de negocio actual.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Marco visual estratégico para entender, analizar y optimizar
-                    el modelo de negocio actual.
-                  </p>
                 </div>
               </div>
             </section>
@@ -543,90 +803,60 @@
                 </p>
               </div>
 
-              <div class="cards-grid">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Desarrollo Sitio Web</h3>
+              <div class="glass-container">
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Desarrollo Sitio Web</h2>
+                    <p>
+                      Página web profesional optimizada con menú digital,
+                      sistema de contacto y reservas en línea integradas.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Página web profesional optimizada con menú digital, sistema
-                    de contacto y reservas en línea integradas.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H7V4h10v16z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Sistema de Comanda Digital</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Sistema de Comanda Digital</h2>
+                    <p>
+                      Herramienta intuitiva para gestionar pedidos, inventario y
+                      agilizar toda la operación del restaurante.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Herramienta intuitiva para gestionar pedidos, inventario y
-                    agilizar toda la operación del restaurante.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Automatización Inteligente</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Automatización Inteligente</h2>
+                    <p>
+                      Integración de procesos digitales para mejorar eficiencia
+                      operativa y reducir errores manuales.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Integración de procesos digitales para mejorar eficiencia
-                    operativa y reducir errores manuales.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Capacitación Integral</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Capacitación Integral</h2>
+                    <p>
+                      Formación completa y soporte continuo para el uso efectivo
+                      de todas las herramientas digitales.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Formación completa y soporte continuo para el uso efectivo
-                    de todas las herramientas digitales.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Integración Apps Delivery</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Integración Apps Delivery</h2>
+                    <p>
+                      Conexión seamless con plataformas de reparto para ampliar
+                      tu alcance y maximizar ventas.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Conexión seamless con plataformas de reparto para ampliar tu
-                    alcance y maximizar ventas.
-                  </p>
                 </div>
               </div>
             </section>
@@ -643,90 +873,60 @@
                 </p>
               </div>
 
-              <div class="cards-grid">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Inbound Marketing</h3>
+              <div class="glass-container">
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Inbound Marketing</h2>
+                    <p>
+                      Estrategias de contenido valioso en blog, email marketing
+                      y redes sociales para atraer clientes naturalmente.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Estrategias de contenido valioso en blog, email marketing y
-                    redes sociales para atraer clientes naturalmente.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM8.5 16L12 13.5 15.5 16 12 18.5 8.5 16z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Lead Magnets & Promociones</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Lead Magnets & Promociones</h2>
+                    <p>
+                      Ofertas inteligentes y contenido premium para captar leads
+                      calificados y convertirlos en clientes leales.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Ofertas inteligentes y contenido premium para captar leads
-                    calificados y convertirlos en clientes leales.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Campañas Pagadas</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Campañas Pagadas</h2>
+                    <p>
+                      Publicidad estratégica en Google Ads y Meta Ads con
+                      segmentación precisa y optimización continua del ROI.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Publicidad estratégica en Google Ads y Meta Ads con
-                    segmentación precisa y optimización continua del ROI.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Analytics & Optimización</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Analytics & Optimización</h2>
+                    <p>
+                      Monitoreo avanzado con métricas clave y optimización
+                      constante para maximizar resultados y ROI.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Monitoreo avanzado con métricas clave y optimización
-                    constante para maximizar resultados y ROI.
-                  </p>
                 </div>
 
-                <div class="card">
-                  <div class="card-header">
-                    <div class="icon">
-                      <svg viewBox="0 0 24 24">
-                        <path
-                          d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 class="card-title">Calendario Editorial</h3>
+                <div class="box">
+                  <span></span>
+                  <div class="content">
+                    <h2>Calendario Editorial</h2>
+                    <p>
+                      Planificación estratégica de contenidos y pauta
+                      publicitaria para mantener presencia constante y efectiva.
+                    </p>
                   </div>
-                  <p class="card-text">
-                    Planificación estratégica de contenidos y pauta publicitaria
-                    para mantener presencia constante y efectiva.
-                  </p>
                 </div>
               </div>
             </section>
@@ -924,23 +1124,45 @@
           }
         });
 
-        // Add click listeners to all cards
-        const cards = document.querySelectorAll(".card");
-        cards.forEach((card) => {
-          card.addEventListener("click", (event) => {
-            // Added event parameter
-            // Check if the click target is not a button or link within the card
-            if (
-              event.target.tagName === "BUTTON" ||
-              event.target.tagName === "A"
-            ) {
+        // Add click listeners to all interactive elements (old cards and new boxes)
+        const interactiveElements = document.querySelectorAll(".card, .box"); // Updated selector
+
+        interactiveElements.forEach((element) => {
+          element.addEventListener("click", (event) => {
+            // Prevent modal opening if a button or link within the element is clicked
+            if (event.target.closest("button, a")) {
+              // Use closest to handle clicks on descendants of button/a
               return;
             }
-            const title = card.querySelector(".card-title").textContent;
-            const text = card.querySelector(".card-text").innerHTML; // Keep innerHTML for potential formatting
-            openModal(title, text);
-            // Add a class to the card to make it identifiable as clickable
-            card.classList.add("clickable-card");
+
+            let title = "";
+            let text = "";
+
+            if (element.classList.contains("box")) {
+              // New .box structure
+              const contentDiv = element.querySelector(".content");
+              if (contentDiv) {
+                const titleEl = contentDiv.querySelector("h2");
+                const textEl = contentDiv.querySelector("p");
+                if (titleEl) title = titleEl.textContent;
+                if (textEl) text = textEl.innerHTML;
+              }
+            } else if (element.classList.contains("card")) {
+              // Old .card structure
+              const titleEl = element.querySelector(".card-title");
+              const textEl = element.querySelector(".card-text");
+              if (titleEl) title = titleEl.textContent;
+              if (textEl) text = textEl.innerHTML;
+            }
+
+            if (title || text) {
+              // Only open modal if we found some content
+              openModal(title, text);
+            }
+
+            // Add a class to indicate it's clickable (for cursor styling)
+            // The existing style for .clickable-card should work fine.
+            element.classList.add("clickable-card");
           });
         });
 
