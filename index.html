@@ -65,7 +65,7 @@
       .slider {
         width: 100%;
         max-width: 1200px;
-        background: rgba(28, 28, 29, 0.95);
+        background: #5e312d;
         backdrop-filter: blur(20px);
         border-radius: 24px;
         border: 1px solid rgba(245, 166, 35, 0.1);
@@ -73,6 +73,7 @@
           0 0 0 1px rgba(255, 255, 255, 0.05);
         overflow: hidden;
         position: relative;
+        /* border: dashed 2px orange; */
       }
 
       .progress-bar {
@@ -108,6 +109,7 @@
       .slide-header {
         text-align: center;
         margin-bottom: 2rem;
+        /* border: dashed 2px orange; */
       }
 
       .slide-number {
@@ -159,15 +161,12 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 1.5rem;
-        margin-top: 2rem;
+
+        /* border: dashed 2px orange; */
       }
 
       .card {
-        background: linear-gradient(
-          135deg,
-          rgba(31, 31, 62, 0.8),
-          rgba(45, 45, 80, 0.6)
-        );
+        background: linear-gradient(135deg, rgb(29, 34, 46), rgb(37, 37, 53));
         border: 1px solid rgba(245, 166, 35, 0.1);
         border-radius: 16px;
         padding: 1.5rem;
@@ -364,7 +363,7 @@
       }
 
       .modal-content {
-        background-color: #12122e; /* Dark background similar to cards */
+        background-color: #252530; /* Dark background similar to cards */
         margin: auto;
         padding: 30px;
         border: 1px solid rgba(245, 166, 35, 0.2); /* Accent border */
